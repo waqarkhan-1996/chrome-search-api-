@@ -1,0 +1,33 @@
+function chromesearch() {
+
+let api_key = "xxxxxxxxxxxxxxxxxxxxxxxxx";
+let engineid = "xxxxxxxxxxxxxx";
+let baseUrl = 'https://www.googleapis.com/customsearch/v1';
+
+let search = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Chrome Api').getRange('E8').getValue();
+let chromesheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Chrome Api');
+let lr = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Chrome Api').getLastRow()+1;
+
+  var apiUrl = baseUrl + '?key=' + api_key + '&cx=' + engineid + '&q=' + search;
+
+  Logger.log(apiUrl)
+
+  let response =   UrlFetchApp.fetch(apiUrl);
+  let data = JSON.parse(response.getContentText());
+  chromesheet.getRange("A:A").clear()
+
+
+for(i=0; i<data.items.length; i++){
+
+let title = data.items[i].title;
+let url =   data.items[i].link;
+
+ chromesheet.getRange(lr + i + 1, 1).setValue(title); 
+  chromesheet.getRange(lr + i + 2, 1).setValue(url); 
+  lr += 2; 
+
+
+
+}
+
+  }
